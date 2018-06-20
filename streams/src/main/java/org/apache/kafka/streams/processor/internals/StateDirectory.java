@@ -80,7 +80,7 @@ public class StateDirectory {
                 String.format("base state directory [%s] doesn't exist and couldn't be created", stateDirName));
         }
         stateDir = new File(baseDir, config.getString(StreamsConfig.APPLICATION_ID_CONFIG));
-        if (!stateDir.exists() && !stateDir.mkdirs()) {
+        if (!baseDir.exists() || !stateDir.exists() && !stateDir.mkdirs()) {
             throw new ProcessorStateException(
                 String.format("state directory [%s] doesn't exist and couldn't be created", stateDir.getPath()));
         }
@@ -93,7 +93,7 @@ public class StateDirectory {
      */
     public File directoryForTask(final TaskId taskId) {
         final File taskDir = new File(stateDir, taskId.toString());
-        if (!taskDir.exists() && !taskDir.mkdirs()) {
+        if (!stateDir.exists() || !taskDir.exists() && !taskDir.mkdirs()) {
             throw new ProcessorStateException(
                 String.format("task directory [%s] doesn't exist and couldn't be created", taskDir.getPath()));
         }
@@ -107,7 +107,7 @@ public class StateDirectory {
      */
     File globalStateDir() {
         final File dir = new File(stateDir, "global");
-        if (!dir.exists() && !dir.mkdirs()) {
+        if (!stateDir.exists() || !dir.exists() && !dir.mkdirs()) {
             throw new ProcessorStateException(
                 String.format("global state directory [%s] doesn't exist and couldn't be created", dir.getPath()));
         }
